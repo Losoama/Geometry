@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class V5 {
+    //Проверка на синхронизацию
+
     /**
      * Сортирует точки по координате x слева-направо
      *
@@ -35,10 +37,14 @@ public class V5 {
         Collections.sort(lines, new Comparator<Line>() {
             @Override
             public int compare(Line p1, Line p2) {
-                double y1 = (double) ((p1.getPoint1().getY() - p1.getPoint0().getY()) * X + p1.getPoint1().getX() * p1.getPoint0().getY() -
+                /*double y1 = (double) ((p1.getPoint1().getY() - p1.getPoint0().getY()) * X + p1.getPoint1().getX() * p1.getPoint0().getY() -
                         p1.getPoint0().getX() * p1.getPoint1().getY()) / (p1.getPoint1().getX() - p1.getPoint0().getX());
                 double y2 = (double) ((p2.getPoint1().getY() - p2.getPoint0().getY()) * X + p2.getPoint1().getX() * p2.getPoint0().getY() -
-                        p2.getPoint0().getX() * p2.getPoint1().getY()) / (p2.getPoint1().getX() - p2.getPoint0().getX());
+                        p2.getPoint0().getX() * p2.getPoint1().getY()) / (p2.getPoint1().getX() - p2.getPoint0().getX()); */
+                double y1 = (double) (p1.getPoint1().getX() - X) * Math.abs(p1.getPoint1().getY() - p1.getPoint0().getY()) /
+                        (p1.getPoint1().getX() - p1.getPoint0().getX());
+                double y2 = (double) (p2.getPoint1().getX() - X) * Math.abs(p2.getPoint1().getY() - p2.getPoint0().getY()) /
+                        (p2.getPoint1().getX() - p2.getPoint0().getX());
                 if (y1 > y2) {
                     return 1;
                 } else {
@@ -50,6 +56,17 @@ public class V5 {
 
     //Добавить линию
     private static void insert(ArrayList<Line> tLines, Line l) {
+        int X = l.getLeftPoint().getX();
+        for (int i = 0; i < tLines.size(); ++i) {
+            double y1 = (double) (l.getPoint1().getX() - X) * Math.abs(l.getPoint1().getY() - l.getPoint0().getY()) /
+                    (l.getPoint1().getX() - l.getPoint0().getX());
+            double y2 = (double) (tLines.get(i).getPoint1().getX() - X) * Math.abs(tLines.get(i).getPoint1().getY() - tLines.get(i).getPoint0().getY()) /
+                    (tLines.get(i).getPoint1().getX() - tLines.get(i).getPoint0().getX());
+            if (y1 > y2) {
+                tLines.add(i, l);
+                return;
+            }
+        }
         tLines.add(l);
     }
 
@@ -126,17 +143,19 @@ public class V5 {
     //Пересекаются ли хотя бы два отрезка с отрисовкой
     public static boolean isCrossed2(ArrayList<Point> xArray) {
         ArrayList<Line> tLines = new ArrayList<Line>();
-
         V5.sortByX(xArray);
-
+        Point pP = new Point(-10, -10);
         for (Point p : xArray) {
+            MyFrame.clearImage();
+            MyFrame.showLines();
             /*****/
-            drawB(new Line(p.getX(),0,p.getX(),1000), Color.RED);
+            drawB(new Line(pP.getX(), 0, pP.getX(), 1000), Color.WHITE);
+            drawB(new Line(p.getX(), 0, p.getX(), 1000), Color.RED);
+            pP = p;
             MyFrame.jLabel1.update(MyFrame.jLabel1.getGraphics());
             /*****/
             if (p.isLeftPoint()) {
                 insert(tLines, p.getLine());
-                sortLines(tLines, p.getX());
                 /*****/
                 drawB(p.getLine(), Color.GREEN);
                 MyFrame.jLabel1.update(MyFrame.jLabel1.getGraphics());
@@ -147,6 +166,8 @@ public class V5 {
 
                     /*****/
                     if (above(tLines, p.getLine()) != null && above(tLines, p.getLine()).isCrossed(p.getLine())) {
+                        MyFrame.clearImage();
+                        MyFrame.showLines();
                         drawB(above(tLines, p.getLine()), Color.BLUE);
                         drawB(p.getLine(), Color.BLUE);
                         MyFrame.jLabel1.update(MyFrame.jLabel1.getGraphics());

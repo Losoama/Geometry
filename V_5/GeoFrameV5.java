@@ -53,7 +53,7 @@ public class GeoFrameV5 extends MyFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showLines();
-                if (V5.isCrossed2(points)) {
+                if (V5.isCrossed2(points)) {;
                     jText1.setText("Есть пересечение, капитан!");
                 } else {
                     jText1.setText("Увы, но пересечений нет!");

@@ -21,7 +21,6 @@ public class GeoFrameV3 extends MyFrame {
     static ArrayList<Shapes.Point> ypoints = new ArrayList<Shapes.Point>(points);
 
     public static void main(String[] args) {
-
         jLabel1.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

@@ -133,4 +133,8 @@ public class Line {
         }
         return this;
     }
+
+    public Point getLeftPoint() {
+        return point0.isLeftPoint() ? point0 : point1;
+    }
 }
