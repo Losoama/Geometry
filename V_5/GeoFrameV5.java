@@ -1,6 +1,6 @@
 package V_5;
 
-import Algorithms.V5;
+import Algorithms.BentleyOttman;
 import Frames.FrameMethods;
 import Frames.MyFrame;
 
@@ -53,7 +53,7 @@ public class GeoFrameV5 extends MyFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showLines();
-                if (V5.isCrossed2(points)) {;
+                if (BentleyOttman.isCrossed2(lines)) {
                     jText1.setText("Есть пересечение, капитан!");
                 } else {
                     jText1.setText("Увы, но пересечений нет!");

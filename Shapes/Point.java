@@ -28,8 +28,14 @@ public class Point implements Comparable {
             haveLine = true;
             this.line = line;
             if (this == line.getPoint0()) {
+                if(line.getPoint0().getX() == line.getPoint1().getX()){ //Для вертикальных прямых
+                    isLeft = line.getPoint0().getY() < line.getPoint1().getY();
+                }
                 isLeft = line.getPoint0().getX() < line.getPoint1().getX();
             } else {
+                if(line.getPoint0().getX() == line.getPoint1().getX()){
+                    isLeft = line.getPoint0().getY() > line.getPoint1().getY();
+                }
                 isLeft = line.getPoint0().getX() > line.getPoint1().getX();
             }
 

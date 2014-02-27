@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class V5 {
+public class BentleyOttman {
     //Проверка на синхронизацию
 
     /**
@@ -25,30 +25,21 @@ public class V5 {
                     return 1;
                 } else if (p1.getX() < p2.getX()) {
                     return -1;
-                } else if (p1.getY() > p2.getY()) {
-                    return -1;
-                }
-                return 1;
-            }
-        });
-    }
-
-    private static void sortLines(ArrayList<Line> lines, final double X) {
-        Collections.sort(lines, new Comparator<Line>() {
-            @Override
-            public int compare(Line p1, Line p2) {
-                /*double y1 = (double) ((p1.getPoint1().getY() - p1.getPoint0().getY()) * X + p1.getPoint1().getX() * p1.getPoint0().getY() -
-                        p1.getPoint0().getX() * p1.getPoint1().getY()) / (p1.getPoint1().getX() - p1.getPoint0().getX());
-                double y2 = (double) ((p2.getPoint1().getY() - p2.getPoint0().getY()) * X + p2.getPoint1().getX() * p2.getPoint0().getY() -
-                        p2.getPoint0().getX() * p2.getPoint1().getY()) / (p2.getPoint1().getX() - p2.getPoint0().getX()); */
-                double y1 = (double) (p1.getPoint1().getX() - X) * Math.abs(p1.getPoint1().getY() - p1.getPoint0().getY()) /
-                        (p1.getPoint1().getX() - p1.getPoint0().getX());
-                double y2 = (double) (p2.getPoint1().getX() - X) * Math.abs(p2.getPoint1().getY() - p2.getPoint0().getY()) /
-                        (p2.getPoint1().getX() - p2.getPoint0().getX());
-                if (y1 > y2) {
-                    return 1;
                 } else {
-                    return -1;
+                    if (p1.getY() != p2.getY()) {
+                        if (p1.getY() > p2.getY()) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+
+                    } else {
+                        if (p1.isLeftPoint() && !p2.isLeftPoint()) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }
                 }
             }
         });
@@ -115,10 +106,15 @@ public class V5 {
     }
 
     //Пересекаются ли хотя бы два отрезка
-    public static boolean isCrossed(ArrayList<Point> xArray) {
+    public static boolean isCrossed(ArrayList<Line> lines) {
         ArrayList<Line> tLines = new ArrayList<Line>();
 
-        V5.sortByX(xArray);
+        ArrayList<Point> xArray = new ArrayList<Point>();
+        for (Line l : lines) {
+            xArray.add(l.getPoint0());
+            xArray.add(l.getPoint1());
+        }
+        BentleyOttman.sortByX(xArray);
 
         for (Point p : xArray) {
             if (p.isLeftPoint()) {
@@ -141,9 +137,16 @@ public class V5 {
     }
 
     //Пересекаются ли хотя бы два отрезка с отрисовкой
-    public static boolean isCrossed2(ArrayList<Point> xArray) {
+    public static boolean isCrossed2(ArrayList<Line> lines) {
         ArrayList<Line> tLines = new ArrayList<Line>();
-        V5.sortByX(xArray);
+
+        ArrayList<Point> xArray = new ArrayList<Point>();
+        for (Line l : lines) {
+            xArray.add(l.getPoint0());
+            xArray.add(l.getPoint1());
+        }
+        BentleyOttman.sortByX(xArray);
+
         Point pP = new Point(-10, -10);
         for (Point p : xArray) {
             MyFrame.clearImage();
@@ -181,7 +184,7 @@ public class V5 {
                 }
             }
 
-            if (p.isLeftPoint() == false) {
+            if (!p.isLeftPoint()) {
                 if (above(tLines, p.getLine()) != null &&
                         below(tLines, p.getLine()) != null &&
                         above(tLines, p.getLine()).isCrossed(below(tLines, p.getLine()))) {
