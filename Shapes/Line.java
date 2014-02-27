@@ -136,4 +136,8 @@ public class Line {
     public Point getLeftPoint() {
         return point0.isLeftPoint() ? point0 : point1;
     }
+
+    public Point getRightPoint() {
+        return point0.isLeftPoint() ? point1 : point0;
+    }
 }

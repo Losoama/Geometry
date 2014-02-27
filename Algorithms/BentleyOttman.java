@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 
 public class BentleyOttman {
     //Проверка на синхронизацию
@@ -46,7 +47,7 @@ public class BentleyOttman {
     }
 
     //Добавить линию
-    private static void insert(ArrayList<Line> tLines, Line l) {
+    private static void insert(LinkedList<Line> tLines, Line l) {
         int X = l.getLeftPoint().getX();
         for (int i = 0; i < tLines.size(); ++i) {
             double y1 = l.getLeftPoint().getY();
@@ -54,22 +55,14 @@ public class BentleyOttman {
                     (tLines.get(i).getPoint1().getX() - tLines.get(i).getPoint0().getX());
             if (y1 < y2) {
                 tLines.add(i + 1, l);
-                System.out.println("************************");
-                for (Line line : tLines) {
-                    System.out.println(line);
-                }
                 return;
             }
         }
         tLines.add(l);
-        System.out.println("************************");
-        for (Line line : tLines) {
-            System.out.println(line);
-        }
     }
 
     //Получить верхнюю линию
-    private static Line above(ArrayList<Line> tLines, Line l) {
+    private static Line above(LinkedList<Line> tLines, Line l) {
         int index = -1;
         for (Line l0 : tLines) {
             if (l0 == l) {
@@ -86,7 +79,7 @@ public class BentleyOttman {
     }
 
     //Получить нижнюю линию
-    private static Line below(ArrayList<Line> tLines, Line l) {
+    private static Line below(LinkedList<Line> tLines, Line l) {
         int index = -1;
         for (Line l0 : tLines) {
             if (l0 == l) {
@@ -103,7 +96,7 @@ public class BentleyOttman {
     }
 
     //Удалить линию
-    private static void delete(ArrayList<Line> tLines, Line l) {
+    private static void delete(LinkedList<Line> tLines, Line l) {
         for (int i = 0; i < tLines.size(); i++) {
             if (l == tLines.get(i)) {
                 tLines.remove(i);
@@ -114,7 +107,7 @@ public class BentleyOttman {
 
     //Пересекаются ли хотя бы два отрезка
     public static boolean isCrossed(ArrayList<Line> lines) {
-        ArrayList<Line> tLines = new ArrayList<Line>();
+        LinkedList<Line> tLines = new LinkedList<Line>();
 
         ArrayList<Point> xArray = new ArrayList<Point>();
         for (Line l : lines) {
@@ -123,15 +116,21 @@ public class BentleyOttman {
         }
         BentleyOttman.sortByX(xArray);
 
+        int turn = 0;
+
         for (Point p : xArray) {
             if (p.isLeftPoint()) {
-                insert(tLines, p.getLine());
+                turn++;
+                if (turn > 0) {
+                    insert(tLines, p.getLine());
+                }
                 if ((above(tLines, p.getLine()) != null && above(tLines, p.getLine()).isCrossed(p.getLine())) ||
                         (below(tLines, p.getLine()) != null && below(tLines, p.getLine()).isCrossed(p.getLine()))) {
                     return true;
                 }
             }
             if (!p.isLeftPoint()) {
+                turn--;
                 if (above(tLines, p.getLine()) != null &&
                         below(tLines, p.getLine()) != null &&
                         above(tLines, p.getLine()).isCrossed(below(tLines, p.getLine()))) {
@@ -145,7 +144,7 @@ public class BentleyOttman {
 
     //Пересекаются ли хотя бы два отрезка с отрисовкой
     public static boolean isCrossed2(ArrayList<Line> lines) {
-        ArrayList<Line> tLines = new ArrayList<Line>();
+        LinkedList<Line> tLines = new LinkedList<Line>();
 
         ArrayList<Point> xArray = new ArrayList<Point>();
         for (Line l : lines) {
@@ -155,6 +154,9 @@ public class BentleyOttman {
         BentleyOttman.sortByX(xArray);
 
         Point pP = new Point(-10, -10);
+
+        int turn = 0;
+
         for (Point p : xArray) {
             MyFrame.clearImage();
             MyFrame.showLines();
@@ -165,7 +167,10 @@ public class BentleyOttman {
             MyFrame.jLabel1.update(MyFrame.jLabel1.getGraphics());
             /*****/
             if (p.isLeftPoint()) {
-                insert(tLines, p.getLine());
+                turn++;
+                if (turn > 0) {
+                    insert(tLines, p.getLine());
+                }
                 /*****/
                 drawB(p.getLine(), Color.GREEN);
                 MyFrame.jLabel1.update(MyFrame.jLabel1.getGraphics());
@@ -192,6 +197,7 @@ public class BentleyOttman {
             }
 
             if (!p.isLeftPoint()) {
+                turn++;
                 if (above(tLines, p.getLine()) != null &&
                         below(tLines, p.getLine()) != null &&
                         above(tLines, p.getLine()).isCrossed(below(tLines, p.getLine()))) {
