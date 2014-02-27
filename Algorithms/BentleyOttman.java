@@ -49,16 +49,23 @@ public class BentleyOttman {
     private static void insert(ArrayList<Line> tLines, Line l) {
         int X = l.getLeftPoint().getX();
         for (int i = 0; i < tLines.size(); ++i) {
-            double y1 = (double) (l.getPoint1().getX() - X) * Math.abs(l.getPoint1().getY() - l.getPoint0().getY()) /
-                    (l.getPoint1().getX() - l.getPoint0().getX());
+            double y1 = l.getLeftPoint().getY();
             double y2 = (double) (tLines.get(i).getPoint1().getX() - X) * Math.abs(tLines.get(i).getPoint1().getY() - tLines.get(i).getPoint0().getY()) /
                     (tLines.get(i).getPoint1().getX() - tLines.get(i).getPoint0().getX());
-            if (y1 > y2) {
-                tLines.add(i, l);
+            if (y1 < y2) {
+                tLines.add(i + 1, l);
+                System.out.println("************************");
+                for (Line line : tLines) {
+                    System.out.println(line);
+                }
                 return;
             }
         }
         tLines.add(l);
+        System.out.println("************************");
+        for (Line line : tLines) {
+            System.out.println(line);
+        }
     }
 
     //Получить верхнюю линию
