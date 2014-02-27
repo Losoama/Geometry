@@ -67,9 +67,8 @@ public class GeoFrameV3 extends MyFrame {
                 System.out.println();
 
                 System.out.println();
-                ArrayList<Shapes.Point> aux = new ArrayList<Shapes.Point>();
                 Line l;
-                l = closestPair(xpoints, ypoints, aux, 0, xpoints.size() - 1, new Line(0, 0, 500, 500));
+                l = closestPair(xpoints, ypoints, new ArrayList<Shapes.Point>(), 0, xpoints.size() - 1, new Line(0, 0, 500, 500));
                 g.setColor(Color.GREEN);
                 clearImage();
                 showPoints();
