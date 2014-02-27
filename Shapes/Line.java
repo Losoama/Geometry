@@ -108,8 +108,7 @@ public class Line {
     @Override
     public String toString() {
         return "(" + this.getPoint0().getX() + ", " + this.getPoint0().getY() + "); " +
-                "(" + this.getPoint1().getX() + ", " + this.getPoint1().getY() + ")\n" +
-                (new Vector(this));
+                "(" + this.getPoint1().getX() + ", " + this.getPoint1().getY() + ")";
     }
 
     /**
